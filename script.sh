@@ -23,9 +23,10 @@ read -n 1 -s && clear
 # Disk Partition
 echo "Let's start with disk partition: "
 sleep 1
-echo "From the following disks, select the disk you want to partition: (enrer the whole path presented)"
+echo "From the following disks, select the disk you want to partition: (enter the whole path presented)"
 sleep 3
 lsblk -p -l
+
 while : ; do
      read disk
      echo "Your choice is $disk, is that correct? (y/n)"
@@ -33,4 +34,15 @@ while : ; do
     [[ "$ans" != "y" ]] || break
 done
 
+echo "How much space should be allocated for the boot sector?"
+while : ; do
+     read boot
+     echo "Allocating $boot for the boot section. correct? (y/n)"
+     read ans
+     [[ "$ans" != "y" ]] || break
+done
+
 fdisk $disk
+g
+1
++"$boot"
