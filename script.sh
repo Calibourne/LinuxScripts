@@ -25,7 +25,8 @@ echo "Let's start with disk partition: "
 sleep 1
 echo "From the following disks, select the disk you want to partition: (enter the whole path presented)"
 sleep 3
-lsblk -p -o NAME > disks
+disks = $(lsblk -p -o NAME)
+disks = "${disks[@]/NAME}"
 
 while : ; do
      select opt in disks; do
