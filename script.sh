@@ -27,5 +27,5 @@ echo "From the following disks, select the disk you want to partition: (enrer th
 sleep 3
 lsblk -p -l
 read $disk
-echo $disk
+echo "..." $disk
 # fdisk $disk
