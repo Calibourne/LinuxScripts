@@ -22,8 +22,9 @@ read -n 1 -s && clear
 
 # Disk Partition
 echo "Let's start with disk partition: "
-sleep 3
+sleep 1
 echo "From the following disks, select the disk you want to partition: (enrer the whole path presented)"
-fdisk -l
-
-# cfdisk
+sleep 3
+lsblk -p -l
+read $disk
+fdisk $disk
