@@ -26,6 +26,11 @@ sleep 1
 echo "From the following disks, select the disk you want to partition: (enrer the whole path presented)"
 sleep 3
 lsblk -p -l
-read $disk
-echo "... $disk"
-# fdisk $disk
+while : ; do
+     read disk
+     echo "Your choice is $disk, is that correct? (y/n)"
+     read ans
+    [[ "$ans" != "y" ]] || break
+done
+
+fdisk $disk
