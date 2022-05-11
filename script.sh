@@ -28,6 +28,8 @@ sleep 3
 disks=$(lsblk -p -o NAME)
 disks="${disks[@]/NAME}"
 
+echo "$disks"
+
 while : ; do
      select opt in disks; do
           echo "Selected disk: $opt, is that correct? (y/n)"
