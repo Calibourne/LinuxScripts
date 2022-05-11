@@ -28,11 +28,19 @@ sleep 3
 lsblk -p -l
 
 while : ; do
-     read disk
-     echo "Your choice is $disk, is that correct? (y/n)"
+     select opt in lsblk -p -l; do
+          echo "Selected disk: $opt, is that correct? (y/n)"
+     done
      read ans
-    [[ "$ans" != "y" ]] || break
+     [[ "$ans" != "y" ]] || break
 done
+
+# while : ; do
+#      read disk
+#      echo "Your choice is $disk, is that correct? (y/n)"
+#      read ans
+#     [[ "$ans" != "y" ]] || break
+# done
 
 echo "How much space should be allocated for the EFI partition?"
 while : ; do
