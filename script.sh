@@ -34,15 +34,24 @@ while : ; do
     [[ "$ans" != "y" ]] || break
 done
 
-echo "How much space should be allocated for the boot sector?"
+echo "How much space should be allocated for the EFI partition?"
 while : ; do
-     read boot
-     echo "Allocating $boot for the boot section. correct? (y/n)"
+     read efi
+     echo "Allocating $efi for the EFI section. correct? (y/n)"
      read ans
      [[ "$ans" != "y" ]] || break
 done
 
-fdisk $disk
-g
-1
-+"$boot"
+# fdisk $disk(
+# echo "g"
+# echo "n"
+# echo "+$boot"
+
+# )
+(
+echo "g" # create gpt partition table
+echo "n" # create new partition
+echo 1 # first partition
+echo 
+echo "+$efi"
+) | fdisk $disk
