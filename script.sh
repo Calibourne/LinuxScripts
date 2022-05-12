@@ -32,7 +32,7 @@ echo "$disks"
 
 while : ; do
      read disk
-     echo "Your choice is $disk, is that correct? (y/n)"
+     echo "Your choice is /dev/$disk, is that correct? (y/n)"
      read ans
     [[ "$ans" != "y" ]] || break
 done
