@@ -57,4 +57,4 @@ echo "n" # create new partition
 echo 1 # first partition
 echo 
 echo "+$efi"
-) | fdisk $disk
+) | fdisk "/dev/$disk"
