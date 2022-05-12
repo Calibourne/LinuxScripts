@@ -23,27 +23,19 @@ read -n 1 -s && clear
 # Disk Partition
 echo "Let's start with disk partition: "
 sleep 1
-echo "From the following disks, select the disk you want to partition: (enter the whole path presented)"
+echo "From the following disks, select the disk you want to partition: (enter the device name after the '/dev/' prefix)"
 sleep 3
-disks=$(lsblk -p -o NAME)
+disks=$(blkid | awk '{print substr($1, 0, length($1) - 1)}')
 disks="${disks[@]/NAME}"
 
 echo "$disks"
 
 while : ; do
-     select opt in disks; do
-          echo "Selected disk: $opt, is that correct? (y/n)"
-     done
+     read disk
+     echo "Your choice is $disk, is that correct? (y/n)"
      read ans
-     [[ "$ans" != "y" ]] || break
+    [[ "$ans" != "y" ]] || break
 done
-
-# while : ; do
-#      read disk
-#      echo "Your choice is $disk, is that correct? (y/n)"
-#      read ans
-#     [[ "$ans" != "y" ]] || break
-# done
 
 echo "How much space should be allocated for the EFI partition?"
 while : ; do
