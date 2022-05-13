@@ -20,40 +20,65 @@ echo "Press any key when you're ready..."
 
 read -n 1 -s && clear
 
+timedatectl set-ntp true
+
 # Disk Partition
 echo "Let's start with disk partition: "
 sleep 1
-echo "From the following disks, select the disk you want to partition: (enter the device name after the '/dev/' prefix)"
-sleep 3
 
-lsblk -p
+echo "From the following disks, select the disk you want to partition: "
+lsblk -p -o NAME,SIZE
+echo "Enter the desired device name after the '/dev/' prefix:"
 
 while : ; do
      read disk
-     echo "Your choice is /dev/$disk, is that correct? (y/n)"
+     echo "Your choice is /dev/$disk. correct? (y/n)"
      read ans
-    [[ "$ans" != "y" ]] || break
+    [[ "$ans" == "y" ]] && break
+    [[ "$ans" == "n" ]] && clear && lsblk -p -o NAME,SIZE && echo "Please enter the desired device name:" && continue
 done
 
-echo "How much space should be allocated for the EFI partition?"
+clear
 while : ; do
+     echo "How much space should be allocated for the EFI partition?"
      read efi
-     echo "Allocating $efi for the EFI section. correct? (y/n)"
+     echo "Allocating $efi for the EFI partition. correct? (y/n)"
      read ans
-     [[ "$ans" != "y" ]] || break
+     [[ "$ans" == "y" ]] && break
+     [["$ans" != "n"]] && clear && continue
 done
 
-# fdisk $disk(
-# echo "g"
-# echo "n"
-# echo "+$boot"
+clear
+while : ; do
+     echo "How much space should be allocated for the SWAP partition?"
+     read swap
+     echo "Allocating $swap for the SWAP section. correct? (y/n)"
+     read ans
+     [[ "$ans" == "y" ]] && break
+     [["$ans" != "n"]] && clear && continue
+done
 
-# )
+echo "Formatting $disk..."
 (
-echo "g" # create gpt partition table
-echo "n" # create new partition
-echo 1 # first partition
-echo 
-echo "+$efi"
-echo "w"
+     # create gpt partition table
+     echo "g"
+
+     # create EFI partition
+     echo "n" ; echo 1
+     echo ; echo "+$efi"
+     
+     # create SWAP partition
+     echo "n" ; echo 2
+     echo ; echo "+$swap"
+
+     # create Linux System partition
+     echo "n" ; echo 3
+     echo ; echo
+
+     # fix the partition types
+     echo "t" ; echo 1 ; echo 1
+     echo "t" ; echo 2 ; echo 19
+
+     # save the progress
+     echo "w"
 ) | fdisk "/dev/$disk"
