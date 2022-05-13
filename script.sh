@@ -25,10 +25,8 @@ echo "Let's start with disk partition: "
 sleep 1
 echo "From the following disks, select the disk you want to partition: (enter the device name after the '/dev/' prefix)"
 sleep 3
-disks=$(blkid | awk '{print substr($1, 0, length($1) - 1)}')
-disks="${disks[@]/NAME}"
 
-echo "$disks"
+lsblk -p
 
 while : ; do
      read disk
@@ -57,4 +55,5 @@ echo "n" # create new partition
 echo 1 # first partition
 echo 
 echo "+$efi"
+echo "w"
 ) | fdisk "/dev/$disk"
